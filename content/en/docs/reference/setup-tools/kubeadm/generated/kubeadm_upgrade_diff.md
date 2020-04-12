@@ -1,6 +1,4 @@
 
-Show what differences would be applied to existing static pod manifests. See also: kubeadm upgrade apply --dry-run
-
 ### Synopsis
 
 
@@ -52,6 +50,13 @@ kubeadm upgrade diff [version] [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">help for diff</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">--kubeconfig string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: "/etc/kubernetes/admin.conf"</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">The kubeconfig file to use when talking to the cluster. If the flag is not set, a set of standard locations can be searched for an existing kubeconfig file.</td>
     </tr>
 
     <tr>

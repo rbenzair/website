@@ -1,6 +1,4 @@
 
-Generates all static Pod manifest files necessary to establish the control plane
-
 ### Synopsis
 
 

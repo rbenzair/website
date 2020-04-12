@@ -31,7 +31,7 @@ content_template: templates/task
 
 在这个练习中，你将创建一个包含一个容器的pod。这是该pod的配置文件：
 
-{{< code file="dapi-volume.yaml" >}}
+{{< codenew file="pods/inject/dapi-volume.yaml" >}}
 
 在配置文件中，你可以看到Pod有一个`downwardAPI`类型的Volume，并且挂载到容器中的`/etc`。
 
@@ -40,13 +40,13 @@ content_template: templates/task
 第二个元素指示Pod的`annotations`字段的值保存在名为`annotations`的文件中。
 
 {{< note >}}
-**注意:** 本示例中的字段是Pod字段，不是Pod中容器的字段。 
+本示例中的字段是Pod字段，不是Pod中容器的字段。
 {{< /note >}}
 
 创建 Pod：
 
 ```shell
-kubectl create -f https://k8s.io/cn/docs/tasks/inject-data-application/dapi-volume.yaml
+kubectl apply -f https://k8s.io/examples/pods/inject/dapi-volume.yaml
 ```
 
 验证Pod中的容器运行正常：
@@ -107,19 +107,33 @@ zone="us-est-coast"
 /# ls -laR /etc
 ```
 
-在输出中可以看到，`labels` 和 `annotations`文件都在一个临时子目录中：这个例子，`..2982_06_02_21_47_53.299460680`。在`/etc`目录中，`..data`是一个指向临时子目录
+在输出中可以看到，`labels` 和 `annotations`文件都在一个临时子目录中：这个例子，`..2019_12_05_07_00_34.813117769`。在`/etc`目录中，`..data`是一个指向临时子目录
 的符号链接。`/etc`目录中，`labels` 和 `annotations`也是符号链接。
 
 ```
-drwxr-xr-x  ... Feb 6 21:47 ..2982_06_02_21_47_53.299460680
-lrwxrwxrwx  ... Feb 6 21:47 ..data -> ..2982_06_02_21_47_53.299460680
-lrwxrwxrwx  ... Feb 6 21:47 annotations -> ..data/annotations
-lrwxrwxrwx  ... Feb 6 21:47 labels -> ..data/labels
-
-/etc/..2982_06_02_21_47_53.299460680:
+/etc/podinfo # ls -alRL 
+.:
 total 8
--rw-r--r--  ... Feb  6 21:47 annotations
--rw-r--r--  ... Feb  6 21:47 labels
+drwxrwxrwt    3 root     root           120 Dec  5 07:00 .
+drwxr-xr-x    1 root     root            21 Dec  5 07:00 ..
+drwxr-xr-x    2 root     root            80 Dec  5 07:00 ..2019_12_05_07_00_34.813117769
+drwxr-xr-x    2 root     root            80 Dec  5 07:00 ..data
+-rw-r--r--    1 root     root          1123 Dec  5 07:00 annotations
+-rw-r--r--    1 root     root            39 Dec  5 07:00 labels
+
+./..2019_12_05_07_00_34.813117769:
+total 8
+drwxr-xr-x    2 root     root            80 Dec  5 07:00 .
+drwxrwxrwt    3 root     root           120 Dec  5 07:00 ..
+-rw-r--r--    1 root     root          1123 Dec  5 07:00 annotations
+-rw-r--r--    1 root     root            39 Dec  5 07:00 labels
+
+./..data:
+total 8
+drwxr-xr-x    2 root     root            80 Dec  5 07:00 .
+drwxrwxrwt    3 root     root           120 Dec  5 07:00 ..
+-rw-r--r--    1 root     root          1123 Dec  5 07:00 annotations
+-rw-r--r--    1 root     root            39 Dec  5 07:00 labels
 ```
 
 用符号链接可实现元数据的动态原子刷新；更新将写入一个新的临时目录，然后`..data`符号链接完成原子更新，通过使用[rename(2)](http://man7.org/linux/man-pages/man2/rename.2.html)。
@@ -134,7 +148,7 @@ total 8
 
 前面的练习中，你将Pod字段保存到DownwardAPIVolumeFile中。接下来这个练习，你将存储容器字段。这里是包含一个容器的pod的配置文件：
 
-{{< code file="dapi-volume-resources.yaml" >}}
+{{< codenew file="pods/inject/dapi-volume-resources.yaml" >}}
 
 在这个配置文件中，你可以看到Pod有一个`downwardAPI`类型的Volume,并且挂载到容器的`/etc`目录。
 
@@ -145,7 +159,7 @@ total 8
 创建Pod：
 
 ```shell
-kubectl create -f https://k8s.io/cn/docs/tasks/inject-data-application/dapi-volume-resources.yaml
+kubectl apply -f https://k8s.io/examples/pods/inject/dapi-volume-resources.yaml
 ```
 
 进入Pod中运行的容器，打开一个shell：
@@ -169,22 +183,34 @@ kubectl exec -it kubernetes-downwardapi-volume-example-2 -- sh
 
 下面这些信息可以通过环境变量和DownwardAPIVolumeFiles提供给容器：
 
-* 节点名称
-* 节点IP
-* Pod名称
-* Pod名字空间
-* Pod IP地址
-* Pod服务帐号名称
-* Pod的UID
-* 容器的CPU约束
-* 容器的CPU请求值
-* 容器的内存约束
-* 容器的内存请求值
+能通过`fieldRef`获得的：
+  * `metadata.name` - Pod名称
+  * `metadata.namespace` - Pod名字空间
+  * `metadata.uid` - Pod的UID, 版本要求 v1.8.0-alpha.2
+  * `metadata.labels['<KEY>']` - 单个 pod 标签值 `<KEY>` (例如, `metadata.labels['mylabel']`); 版本要求 Kubernetes 1.9+
+  * `metadata.annotations['<KEY>']` - 单个 pod 的标注值 `<KEY>` (例如, `metadata.annotations['myannotation']`); 版本要求 Kubernetes 1.9+
 
-此外，以下信息可通过DownwardAPIVolumeFiles获得：
+能通过`resourceFieldRef`获得的：
+  * 容器的CPU约束值
+  * 容器的CPU请求值
+  * 容器的内存约束值
+  * 容器的内存请求值
+  * 容器的临时存储约束值, 版本要求 v1.8.0-beta.0
+  * 容器的临时存储请求值, 版本要求 v1.8.0-beta.0
 
-* Pod的标签
-* Pod的注释
+此外，以下信息可通过DownwardAPIVolumeFiles从`fieldRef`获得：
+
+* `metadata.labels` - all of the pod’s labels, formatted as `label-key="escaped-label-value"` with one label per line
+* `metadata.annotations` - all of the pod’s annotations, formatted as `annotation-key="escaped-annotation-value"` with one annotation per line
+* `metadata.labels` - 所有Pod的标签，以`label-key="escaped-label-value"`格式显示，每行显示一个label
+* `metadata.annotations` - Pod的注释，以`annotation-key="escaped-annotation-value"`格式显示，每行显示一个标签
+
+以下信息可通过环境变量从`fieldRef`获得：
+
+* `status.podIP` - 节点IP
+* `spec.serviceAccountName` - Pod服务帐号名称, 版本要求 v1.4.0-alpha.3
+* `spec.nodeName` - 节点名称, 版本要求 v1.4.0-alpha.3
+* `status.hostIP` - 节点IP, 版本要求 v1.7.0-alpha.1
 
 {{< note >}}
 如果容器未指定CPU和memory limits，则Downward API默认为节点可分配值。

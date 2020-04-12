@@ -10,18 +10,25 @@ card:
 ---
 
 {{% capture overview %}}
-This document outlines the various binary components needed to
-deliver a functioning Kubernetes cluster.
+When you deploy Kubernetes, you get a cluster.
+{{< glossary_definition term_id="cluster" length="all" prepend="A Kubernetes cluster consists of">}}
+
+This document outlines the various components you need to have
+a complete and working Kubernetes cluster.
+
+Here's the diagram of a Kubernetes cluster with all the components tied together.
+
+![Components of Kubernetes](/images/docs/components-of-kubernetes.png)
+
 {{% /capture %}}
 
 {{% capture body %}}
-## Master Components
+## Control Plane Components
 
-Master components provide the cluster's control plane. Master components make global decisions about the
-cluster (for example, scheduling), and detecting and responding to cluster events (starting up a new pod when a replication controller's 'replicas' field is unsatisfied).
+The Control Plane's components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new {{< glossary_tooltip text="pod" term_id="pod">}} when a deployment's `replicas` field is unsatisfied).
 
-Master components can be run on any machine in the cluster. However,
-for simplicity, set up scripts typically start all master components on
+Control Plane components can be run on any machine in the cluster. However,
+for simplicity, set up scripts typically start all Control Plane components on
 the same machine, and do not run user containers on this machine. See
 [Building High-Availability Clusters](/docs/admin/high-availability/) for an example multi-master-VM setup.
 
@@ -55,7 +62,7 @@ These controllers include:
 
 cloud-controller-manager runs cloud-provider-specific controller loops only. You must disable these controller loops in the kube-controller-manager. You can disable the controller loops by setting the `--cloud-provider` flag to `external` when starting the kube-controller-manager.
 
-cloud-controller-manager allows cloud vendors code and the Kubernetes code to evolve independent of each other. In prior releases, the core Kubernetes code was dependent upon cloud-provider-specific code for functionality. In future releases, code specific to cloud vendors should be maintained by the cloud vendor themselves, and linked to cloud-controller-manager while running Kubernetes.
+cloud-controller-manager allows the cloud vendor's code and the Kubernetes code to evolve independently of each other. In prior releases, the core Kubernetes code was dependent upon cloud-provider-specific code for functionality. In future releases, code specific to cloud vendors should be maintained by the cloud vendor themselves, and linked to cloud-controller-manager while running Kubernetes.
 
 The following controllers have cloud provider dependencies:
 
@@ -74,21 +81,21 @@ Node components run on every node, maintaining running pods and providing the Ku
 
 ### kube-proxy
 
-[kube-proxy](/docs/admin/kube-proxy/) enables the Kubernetes service abstraction by maintaining
-network rules on the host and performing connection forwarding.
+{{< glossary_definition term_id="kube-proxy" length="all" >}}
 
 ### Container Runtime
 
-The container runtime is the software that is responsible for running containers.
-Kubernetes supports several runtimes: [Docker](http://www.docker.com), [containerd](https://containerd.io), [cri-o](https://cri-o.io/), [rktlet](https://github.com/kubernetes-incubator/rktlet) and any implementation of the [Kubernetes CRI (Container Runtime Interface)](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-node/container-runtime-interface.md).
+{{< glossary_definition term_id="container-runtime" length="all" >}}
 
 ## Addons
 
-Addons are pods and services that implement cluster features. The pods may be managed
-by Deployments, ReplicationControllers, and so on. Namespaced addon objects are created in
-the `kube-system` namespace.
+Addons use Kubernetes resources ({{< glossary_tooltip term_id="daemonset" >}},
+{{< glossary_tooltip term_id="deployment" >}}, etc)
+to implement cluster features. Because these are providing cluster-level features, namespaced resources
+for addons belong within the `kube-system` namespace.
 
-Selected addons are described below, for an extended list of available addons please see [Addons](/docs/concepts/cluster-administration/addons/).
+Selected addons are described below; for an extended list of available addons, please
+see [Addons](/docs/concepts/cluster-administration/addons/).
 
 ### DNS
 
@@ -109,9 +116,13 @@ about containers in a central database, and provides a UI for browsing that data
 
 ### Cluster-level Logging
 
-A [Cluster-level logging](/docs/concepts/cluster-administration/logging/) mechanism is responsible for
+A [cluster-level logging](/docs/concepts/cluster-administration/logging/) mechanism is responsible for
 saving container logs to a central log store with search/browsing interface.
 
 {{% /capture %}}
-
-
+{{% capture whatsnext %}}
+* Learn about [Nodes](/docs/concepts/architecture/nodes/)
+* Learn about [Controllers](/docs/concepts/architecture/controller/)
+* Learn about [kube-scheduler](/docs/concepts/scheduling/kube-scheduler/)
+* Read etcd's official [documentation](https://etcd.io/docs/)
+{{% /capture %}}

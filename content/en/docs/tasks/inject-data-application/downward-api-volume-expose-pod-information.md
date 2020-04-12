@@ -25,8 +25,8 @@ Pod fields and Container fields.
 
 There are two ways to expose Pod and Container fields to a running Container:
 
-* [Environment variables](/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
-* DownwardAPIVolumeFiles
+* [Environment variables](/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#the-downward-api)
+* Volume Files
 
 Together, these two ways of exposing Pod and Container fields are called the
 *Downward API*.
@@ -59,7 +59,7 @@ Create the Pod:
 kubectl apply -f https://k8s.io/examples/pods/inject/dapi-volume.yaml
 ```
 
-Verify that Container in the Pod is running:
+Verify that the Container in the Pod is running:
 
 ```shell
 kubectl get pods
@@ -199,13 +199,9 @@ The following information is available to containers through environment
 variables and `downwardAPI` volumes:
 
 * Information available via `fieldRef`:
-  * `spec.nodeName` - the node’s name
-  * `status.hostIP` - the node's IP
   * `metadata.name` - the pod’s name
   * `metadata.namespace` - the pod’s namespace
-  * `status.podIP` - the pod’s IP address
-  * `spec.serviceAccountName` - the pod’s service account name
-  * `metadata.uid` - the pod’s UID
+  * `metadata.uid` - the pod’s UID, available since v1.8.0-alpha.2
   * `metadata.labels['<KEY>']` - the value of the pod’s label `<KEY>` (for example, `metadata.labels['mylabel']`); available in Kubernetes 1.9+
   * `metadata.annotations['<KEY>']` - the value of the pod’s annotation `<KEY>` (for example, `metadata.annotations['myannotation']`); available in Kubernetes 1.9+
 * Information available via `resourceFieldRef`:
@@ -213,12 +209,21 @@ variables and `downwardAPI` volumes:
   * A Container’s CPU request
   * A Container’s memory limit
   * A Container’s memory request
+  * A Container’s ephemeral-storage limit, available since v1.8.0-beta.0
+  * A Container’s ephemeral-storage request, available since v1.8.0-beta.0
 
 In addition, the following information is available through
 `downwardAPI` volume `fieldRef`:
 
 * `metadata.labels` - all of the pod’s labels, formatted as `label-key="escaped-label-value"` with one label per line
 * `metadata.annotations` - all of the pod’s annotations, formatted as `annotation-key="escaped-annotation-value"` with one annotation per line
+
+The following information is available through environment variables:
+
+* `status.podIP` - the pod’s IP address
+* `spec.serviceAccountName` - the pod’s service account name, available since v1.4.0-alpha.3
+* `spec.nodeName` - the node’s name, available since v1.4.0-alpha.3
+* `status.hostIP` - the node's IP, available since v1.7.0-alpha.1
 
 {{< note >}}
 If CPU and memory limits are not specified for a Container, the

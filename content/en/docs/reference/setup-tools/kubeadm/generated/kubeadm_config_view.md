@@ -1,6 +1,4 @@
 
-View the kubeadm configuration stored inside the cluster.
-
 ### Synopsis
 
 

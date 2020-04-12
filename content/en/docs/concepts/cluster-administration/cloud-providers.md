@@ -17,14 +17,14 @@ kubeadm has configuration options to specify configuration information for cloud
 in-tree cloud provider can be configured using kubeadm as shown below:
 
 ```yaml
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 nodeRegistration:
   kubeletExtraArgs:
     cloud-provider: "openstack"
     cloud-config: "/etc/kubernetes/cloud.conf"
 ---
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 kubernetesVersion: v1.13.0
 apiServer:
@@ -49,11 +49,14 @@ The in-tree cloud providers typically need both `--cloud-provider` and `--cloud-
 for the [kube-apiserver](/docs/admin/kube-apiserver/), [kube-controller-manager](/docs/admin/kube-controller-manager/) and the
 [kubelet](/docs/admin/kubelet/). The contents of the file specified in `--cloud-config` for each provider is documented below as well.
 
-For all external cloud providers, please follow the instructions on the individual repositories.
+For all external cloud providers, please follow the instructions on the individual repositories,
+which are listed under their headings below, or one may view [the list of all repositories](https://github.com/kubernetes?q=cloud-provider-&type=&language=)
 
 ## AWS
 This section describes all the possible configurations which can
 be used when running Kubernetes on Amazon Web Services.
+
+If you wish to use the external cloud provider, its repository is [kubernetes/cloud-provider-aws](https://github.com/kubernetes/cloud-provider-aws#readme)
 
 ### Node Name
 
@@ -91,19 +94,22 @@ Different settings can be applied to a load balancer service in AWS using _annot
 * `service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-prefix`: Used to specify access log s3 bucket prefix.
 * `service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags`: Used on the service to specify a comma-separated list of key-value pairs which will be recorded as additional tags in the ELB. For example: `"Key1=Val1,Key2=Val2,KeyNoVal1=,KeyNoVal2"`.
 * `service.beta.kubernetes.io/aws-load-balancer-backend-protocol`: Used on the service to specify the protocol spoken by the backend (pod) behind a listener. If `http` (default) or `https`, an HTTPS listener that terminates the connection and parses headers is created. If set to `ssl` or `tcp`, a "raw" SSL listener is used. If set to `http` and `aws-load-balancer-ssl-cert` is not used then a HTTP listener is used.
-* `service.beta.kubernetes.io/aws-load-balancer-ssl-cert`: Used on the service to request a secure listener. Value is a valid certificate ARN. For more, see [ELB Listener Config](http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-listener-config.html) CertARN is an IAM or CM certificate ARN, e.g. `arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012`.
+* `service.beta.kubernetes.io/aws-load-balancer-ssl-cert`: Used on the service to request a secure listener. Value is a valid certificate ARN. For more, see [ELB Listener Config](http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-listener-config.html) CertARN is an IAM or CM certificate ARN, for example `arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012`.
 * `service.beta.kubernetes.io/aws-load-balancer-connection-draining-enabled`: Used on the service to enable or disable connection draining.
 * `service.beta.kubernetes.io/aws-load-balancer-connection-draining-timeout`: Used on the service to specify a connection draining timeout.
 * `service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout`: Used on the service to specify the idle connection timeout.
 * `service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled`: Used on the service to enable or disable cross-zone load balancing.
+* `service.beta.kubernetes.io/aws-load-balancer-security-groups`: Used to specify the security groups to be added to ELB created. This replaces all other security groups previously assigned to the ELB.
 * `service.beta.kubernetes.io/aws-load-balancer-extra-security-groups`: Used on the service to specify additional security groups to be added to ELB created
 * `service.beta.kubernetes.io/aws-load-balancer-internal`: Used on the service to indicate that we want an internal ELB.
 * `service.beta.kubernetes.io/aws-load-balancer-proxy-protocol`: Used on the service to enable the proxy protocol on an ELB. Right now we only accept the value `*` which means enabling the proxy protocol on all ELB backends. In the future we could adjust this to allow setting the proxy protocol only on certain backends.
 * `service.beta.kubernetes.io/aws-load-balancer-ssl-ports`: Used on the service to specify a comma-separated list of ports that will use SSL/HTTPS listeners. Defaults to `*` (all)
 
-The information for the annotations for AWS is taken from the comments on [aws.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/cloudprovider/providers/aws/aws.go)
+The information for the annotations for AWS is taken from the comments on [aws.go](https://github.com/kubernetes/legacy-cloud-providers/blob/master/aws/aws.go)
 
 ## Azure
+
+If you wish to use the external cloud provider, its repository is [kubernetes/cloud-provider-azure](https://github.com/kubernetes/cloud-provider-azure#readme)
 
 ### Node Name
 
@@ -112,12 +118,16 @@ Note that the Kubernetes Node name must match the Azure VM name.
 
 ## CloudStack
 
+If you wish to use the external cloud provider, its repository is [apache/cloudstack-kubernetes-provider](https://github.com/apache/cloudstack-kubernetes-provider)
+
 ### Node Name
 
 The CloudStack cloud provider uses the hostname of the node (as determined by the kubelet or overridden with `--hostname-override`) as the name of the Kubernetes Node object.
 Note that the Kubernetes Node name must match the CloudStack VM name.
 
 ## GCE
+
+If you wish to use the external cloud provider, its repository is [kubernetes/cloud-provider-gcp](https://github.com/kubernetes/cloud-provider-gcp#readme)
 
 ### Node Name
 
@@ -127,6 +137,8 @@ Note that the first segment of the Kubernetes Node name must match the GCE insta
 ## OpenStack
 This section describes all the possible configurations which can
 be used when using OpenStack with Kubernetes.
+
+If you wish to use the external cloud provider, its repository is [kubernetes/cloud-provider-openstack](https://github.com/kubernetes/cloud-provider-openstack#readme)
 
 ### Node Name
 
@@ -285,6 +297,8 @@ and should appear in the `[BlockStorage]` section of the `cloud.conf` file:
   there are many Nova availability zones but only one Cinder availability zone.
   The default value is `false` to preserve the behavior used in earlier
   releases, but may change in the future.
+* `node-volume-attach-limit` (Optional): Maximum number of Volumes that can be
+  attached to the node, default is 256 for cinder.
 
 If deploying Kubernetes versions <= 1.8 on an OpenStack deployment that uses
 paths rather than ports to differentiate between endpoints it may be necessary
@@ -325,10 +339,10 @@ should appear in the `[Metadata]` section of the `cloud.conf` file:
   both configuration drive and metadata service though and only one or the other
   may be available which is why the default is to check both.
 
-##### Router
+##### Route
 
 These configuration options for the OpenStack provider pertain to the [kubenet]
-Kubernetes network plugin and should appear in the `[Router]` section of the
+Kubernetes network plugin and should appear in the `[Route]` section of the
 `cloud.conf` file:
 
 * `router-id` (Optional): If the underlying cloud's Neutron deployment supports
@@ -356,13 +370,18 @@ Note that the Kubernetes Node name must match the VM FQDN (reported by OVirt und
 The Photon cloud provider uses the hostname of the node (as determined by the kubelet or overridden with `--hostname-override`) as the name of the Kubernetes Node object.
 Note that the Kubernetes Node name must match the Photon VM name (or if `overrideIP` is set to true in the `--cloud-config`, the Kubernetes Node name must match the Photon VM IP address).
 
-## VSphere
+## vSphere
 
-### Node Name
+{{< tabs name="vSphere cloud provider" >}}
+{{% tab name="vSphere >= 6.7U3" %}}
+For all vSphere deployments on vSphere >= 6.7U3, the [external vSphere cloud provider](https://github.com/kubernetes/cloud-provider-vsphere), along with the [vSphere CSI driver](https://github.com/kubernetes-sigs/vsphere-csi-driver) is recommended. See [Deploying a Kubernetes Cluster on vSphere with CSI and CPI](https://cloud-provider-vsphere.sigs.k8s.io/tutorials/kubernetes-on-vsphere-with-kubeadm.html) for a quick start guide.
+{{% /tab %}}
+{{% tab name="vSphere < 6.7U3" %}}
+If you are running vSphere < 6.7U3, the in-tree vSphere cloud provider is recommended. See [Running a Kubernetes Cluster on vSphere with kubeadm](https://cloud-provider-vsphere.sigs.k8s.io/tutorials/k8s-vcp-on-vsphere-with-kubeadm.html) for a quick start guide.
+{{% /tab %}}
+{{< /tabs >}}
 
-The VSphere cloud provider uses the detected hostname of the node (as determined by the kubelet) as the name of the Kubernetes Node object.
-
-The `--hostname-override` parameter is ignored by the VSphere cloud provider.
+For in-depth documentation on the vSphere cloud provider, visit the [vSphere cloud provider docs site](https://cloud-provider-vsphere.sigs.k8s.io).
 
 ## IBM Cloud Kubernetes Service
 
@@ -385,3 +404,12 @@ The IBM Cloud Kubernetes Service provider leverages Kubernetes-native persistent
 
 The Baidu cloud provider uses the private IP address of the node (as determined by the kubelet or overridden with `--hostname-override`) as the name of the Kubernetes Node object.
 Note that the Kubernetes Node name must match the Baidu VM private IP.
+
+## Tencent Kubernetes Engine
+
+If you wish to use the external cloud provider, its repository is [TencentCloud/tencentcloud-cloud-controller-manager](https://github.com/TencentCloud/tencentcloud-cloud-controller-manager).
+
+### Node Name
+
+The Tencent cloud provider uses the hostname of the node (as determined by the kubelet or overridden with `--hostname-override`) as the name of the Kubernetes Node object.
+Note that the Kubernetes Node name must match the Tencent VM private IP.

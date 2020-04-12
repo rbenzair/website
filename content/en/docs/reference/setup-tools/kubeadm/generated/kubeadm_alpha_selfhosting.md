@@ -1,6 +1,4 @@
 
-Makes a kubeadm cluster self-hosted
-
 ### Synopsis
 
 

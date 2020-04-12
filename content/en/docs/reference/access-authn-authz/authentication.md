@@ -33,7 +33,7 @@ stored as `Secrets`, which are mounted into pods allowing in-cluster processes
 to talk to the Kubernetes API.
 
 API requests are tied to either a normal user or a service account, or are treated
-as anonymous requests. This means every process inside or outside the cluster, from
+as [anonymous requests](#anonymous-requests). This means every process inside or outside the cluster, from
 a human user typing `kubectl` on a workstation, to `kubelets` on nodes, to members
 of the control plane, must authenticate when making requests to the API server,
 or be treated as an anonymous user.
@@ -71,7 +71,7 @@ can be accomplished using an [authenticating proxy](#authenticating-proxy) or th
 ### X509 Client Certs
 
 Client certificate authentication is enabled by passing the `--client-ca-file=SOMEFILE`
-option to API server. The referenced file must contain one or more certificates authorities
+option to API server. The referenced file must contain one or more certificate authorities
 to use to validate client certificates presented to the API server. If a client certificate
 is presented and verified, the common name of the subject is used as the user name for the
 request. As of Kubernetes 1.4, client certificates can also indicate a user's group memberships
@@ -120,7 +120,7 @@ Authorization: Bearer 31ada4fd-adec-460c-809a-9e56ceb75269
 
 ### Bootstrap Tokens
 
-This feature is currently in **beta**.
+{{< feature-state for_k8s_version="v1.18" state="stable" >}}
 
 To allow for streamlined bootstrapping for new clusters, Kubernetes includes a
 dynamically-managed Bearer token type called a *Bootstrap Token*. These tokens
@@ -208,7 +208,7 @@ spec:
       serviceAccountName: bob-the-bot
       containers:
       - name: nginx
-        image: nginx:1.7.9
+        image: nginx:1.14.2
 ```
 
 Service account bearer tokens are perfectly valid to use outside the cluster and
@@ -347,8 +347,8 @@ Or you can use [this similar script](https://raw.githubusercontent.com/TremoloSe
 
 Setup instructions for specific systems:
 
-- [UAA](http://apigee.com/about/blog/engineering/kubernetes-authentication-enterprise)
-- [Dex](https://speakerdeck.com/ericchiang/kubernetes-access-control-with-dex)
+- [UAA](https://docs.cloudfoundry.org/concepts/architecture/uaa.html)
+- [Dex](https://github.com/dexidp/dex/blob/master/Documentation/kubernetes.md)
 - [OpenUnison](https://www.tremolosecurity.com/orchestra-k8s/)
 
 #### Using kubectl
@@ -572,7 +572,7 @@ checked. WARNING: do **not** reuse a CA that is used in a different context unle
 the risks and the mechanisms to protect the CA's usage.
 
 * `--requestheader-client-ca-file` Required. PEM-encoded certificate bundle. A valid client certificate must be presented and validated against the certificate authorities in the specified file before the request headers are checked for user names.
-* `--requestheader-allowed-names` Optional.  List of common names (cn). If set, a valid client certificate with a Common Name (cn) in the specified list must be presented before the request headers are checked for user names. If empty, any Common Name is allowed.
+* `--requestheader-allowed-names` Optional. List of Common Name values (CNs). If set, a valid client certificate with a CN in the specified list must be presented before the request headers are checked for user names. If empty, any CN is allowed.
 
 
 ## Anonymous requests

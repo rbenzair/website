@@ -24,7 +24,9 @@ pygmentsStyle = "emacs"
 enableGitInfo = true
 
 # Norwegian ("no") is sometimes but not currently used for testing.
-disableLanguages = ["no"]
+# Hindi is disabled because it's currently in development.
+# Italian is disabled until it meets minimum standards for quality.
+disableLanguages = ["hi", "it", "no"]
 
 [blackfriday]
 hrefTargetBlank = true
@@ -64,10 +66,10 @@ time_format_blog = "Monday, January 02, 2006"
 description = "Production-Grade Container Orchestration"
 showedit = true
 
-latest = "v1.14"
+latest = "v1.18"
 
-fullversion = "v1.14.0"
-version = "v1.14"
+fullversion = "v1.18.0"
+version = "v1.18"
 githubbranch = "master"
 docsbranch = "master"
 deprecated = false
@@ -76,12 +78,11 @@ nextUrl = "https://kubernetes-io-vnext-staging.netlify.com/"
 githubWebsiteRepo = "github.com/kubernetes/website"
 githubWebsiteRaw = "raw.githubusercontent.com/kubernetes/website"
 
-[[params.versions]]
-fullversion = "v1.14.0"
-version = "v1.14"
-githubbranch = "v1.14.0"
-docsbranch = "release-1.14"
-url = "https://kubernetes.io"
+# param for displaying an announcement block on every page; see PR #16210
+announcement = false
+# announcement_message is only displayed when announcement = true; update with your specific message
+announcement_message = "The Kubernetes Documentation team would like your feedback!  Please take a <a href='https://www.surveymonkey.com/r/8R237FN' target='_blank'>short survey</a> so we can improve the Kubernetes online documentation."
+
 
 [params.pushAssets]
 css = [
@@ -95,32 +96,39 @@ js = [
 ]
 
 [[params.versions]]
-fullversion = "v1.13.4"
-version = "v1.13"
-githubbranch = "v1.13.4"
-docsbranch = "release-1.13"
-url = "https://v1-13.docs.kubernetes.io"
+fullversion = "v1.18.0"
+version = "v1.18"
+githubbranch = "v1.18.0"
+docsbranch = "release-1.18"
+url = "https://kubernetes.io"
 
 [[params.versions]]
-fullversion = "v1.12.6"
-version = "v1.12"
-githubbranch = "v1.12.6"
-docsbranch = "release-1.12"
-url = "https://v1-12.docs.kubernetes.io"
+fullversion = "v1.17.4"
+version = "v1.17"
+githubbranch = "v1.17.4"
+docsbranch = "release-1.17"
+url = "https://v1-17.docs.kubernetes.io"
 
 [[params.versions]]
-fullversion = "v1.11.8"
-version = "v1.11"
-githubbranch = "v1.11.8"
-docsbranch = "release-1.11"
-url = "https://v1-11.docs.kubernetes.io"
+fullversion = "v1.16.8"
+version = "v1.16"
+githubbranch = "v1.16.8"
+docsbranch = "release-1.16"
+url = "https://v1-16.docs.kubernetes.io"
 
 [[params.versions]]
-fullversion = "v1.10.13"
-version = "v1.10"
-githubbranch = "v1.10.13"
-docsbranch = "release-1.10"
-url = "https://v1-10.docs.kubernetes.io"
+fullversion = "v1.15.11"
+version = "v1.15"
+githubbranch = "v1.15.11"
+docsbranch = "release-1.15"
+url = "https://v1-15.docs.kubernetes.io"
+
+[[params.versions]]
+fullversion = "v1.14.10"
+version = "v1.14"
+githubbranch = "v1.14.10"
+docsbranch = "release-1.14"
+url = "https://v1-14.docs.kubernetes.io"
 
 # Language definitions.
 
@@ -134,7 +142,7 @@ weight = 1
 
 [languages.zh]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "生产级别的容器编排系统"
 languageName = "中文 Chinese"
 weight = 2
 contentDir = "content/zh"
@@ -145,7 +153,7 @@ language_alternatives = ["en"]
 
 [languages.ko]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "운영 수준의 컨테이너 오케스트레이션"
 languageName = "한국어 Korean"
 weight = 3
 contentDir = "content/ko"
@@ -167,7 +175,7 @@ language_alternatives = ["en"]
 
 [languages.fr]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "Solution professionnelle d’orchestration de conteneurs"
 languageName ="Français"
 weight = 5
 contentDir = "content/fr"
@@ -203,7 +211,7 @@ language_alternatives = ["en"]
 
 [languages.de]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "Produktionsreife Container-Orchestrierung"
 languageName ="Deutsch"
 weight = 8
 contentDir = "content/de"
@@ -215,7 +223,7 @@ language_alternatives = ["en"]
 
 [languages.es]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "Orquestación de contenedores para producción"
 languageName ="Español"
 weight = 9
 contentDir = "content/es"
@@ -239,12 +247,66 @@ language_alternatives = ["en"]
 
 [languages.id]
 title = "Kubernetes"
-description = "Production-Grade Container Orchestration"
+description = "Orkestrasi Kontainer dengan Skala Produksi"
 languageName ="Bahasa Indonesia"
 weight = 10
 contentDir = "content/id"
 
 [languages.id.params]
+time_format_blog = "02.01.2006"
+# A list of language codes to look for untranslated content, ordered from left to right.
+language_alternatives = ["en"]
+
+[languages.hi]
+title = "Kubernetes"
+description = "Production-Grade Container Orchestration"
+languageName = "Hindi"
+weight = 11
+contentDir = "content/hi"
+
+[languages.hi.params]
+time_format_blog = "01.02.2006"
+language_alternatives = ["en"]
+
+[languages.vi]
+title = "Kubernetes"
+description = "Giải pháp điều phối container trong môi trường production"
+languageName = "Tiếng Việt"
+contentDir = "content/vi"
+weight = 12
+
+[languages.ru]
+title = "Kubernetes"
+description = "Первоклассная оркестрация контейнеров"
+languageName = "Русский"
+weight = 12
+contentDir = "content/ru"
+
+[languages.ru.params]
+time_format_blog = "02.01.2006"
+# A list of language codes to look for untranslated content, ordered from left to right.
+language_alternatives = ["en"]
+
+[languages.pl]
+title = "Kubernetes"
+description = "Produkcyjny system zarządzania kontenerami"
+languageName = "Polski"
+weight = 13
+contentDir = "content/pl"
+
+[languages.pl.params]
+time_format_blog = "01.02.2006"
+# A list of language codes to look for untranslated content, ordered from left to right.
+language_alternatives = ["en"]
+
+[languages.uk]
+title = "Kubernetes"
+description = "Довершена система оркестрації контейнерів"
+languageName = "Українська"
+weight = 14
+contentDir = "content/uk"
+
+[languages.uk.params]
 time_format_blog = "02.01.2006"
 # A list of language codes to look for untranslated content, ordered from left to right.
 language_alternatives = ["en"]

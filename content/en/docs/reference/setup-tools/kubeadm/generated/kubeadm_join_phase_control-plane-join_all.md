@@ -1,10 +1,8 @@
 
-Joins a machine as a control plane instance
-
 ### Synopsis
 
 
-Joins a machine as a control plane instance
+Join a machine as a control plane instance
 
 ```
 kubeadm join phase control-plane-join all [flags]
@@ -34,7 +32,7 @@ kubeadm join phase control-plane-join all [flags]
     </tr>
 
     <tr>
-      <td colspan="2">--experimental-control-plane</td>
+      <td colspan="2">--control-plane</td>
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">Create a new control plane instance on this node</td>

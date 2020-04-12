@@ -1,6 +1,4 @@
 
-Commands related to handling the kubelet
-
 ### Synopsis
 
 

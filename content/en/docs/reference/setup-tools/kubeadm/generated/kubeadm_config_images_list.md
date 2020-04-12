@@ -1,10 +1,8 @@
 
-Print a list of images kubeadm will use. The configuration file is used in case any images or image repositories are customized.
-
 ### Synopsis
 
 
-Print a list of images kubeadm will use. The configuration file is used in case any images or image repositories are customized.
+Print a list of images kubeadm will use. The configuration file is used in case any images or image repositories are customized
 
 ```
 kubeadm config images list [flags]
@@ -20,17 +18,31 @@ kubeadm config images list [flags]
   <tbody>
 
     <tr>
+      <td colspan="2">--allow-missing-template-keys&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: true</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to golang and jsonpath output formats.</td>
+    </tr>
+
+    <tr>
       <td colspan="2">--config string</td>
     </tr>
     <tr>
-      <td></td><td style="line-height: 130%; word-wrap: break-word;">Path to kubeadm config file.</td>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Path to a kubeadm configuration file.</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">-o, --experimental-output string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: "text"</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Output format. One of: text|json|yaml|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.</td>
     </tr>
 
     <tr>
       <td colspan="2">--feature-gates string</td>
     </tr>
     <tr>
-      <td></td><td style="line-height: 130%; word-wrap: break-word;">A set of key=value pairs that describe feature gates for various features. Options are:<br/></td>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">A set of key=value pairs that describe feature gates for various features. Options are:<br/>IPv6DualStack=true|false (ALPHA - default=false)<br/>PublicKeysECDSA=true|false (ALPHA - default=false)</td>
     </tr>
 
     <tr>
@@ -38,6 +50,13 @@ kubeadm config images list [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">help for list</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">--image-repository string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: "k8s.gcr.io"</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Choose a container registry to pull control plane images from</td>
     </tr>
 
     <tr>

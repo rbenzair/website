@@ -1,6 +1,4 @@
 
-Commands related to handling kubernetes certificates
-
 ### Synopsis
 
 

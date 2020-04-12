@@ -1,6 +1,4 @@
 
-Manage configuration for a kubeadm cluster persisted in a ConfigMap in the cluster.
-
 ### Synopsis
 
 

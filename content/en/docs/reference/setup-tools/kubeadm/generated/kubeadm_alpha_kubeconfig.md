@@ -1,12 +1,10 @@
 
-Kubeconfig file utilities
-
 ### Synopsis
 
 
-Kubeconfig file utilities. 
+Kubeconfig file utilities.
 
-  Alpha Disclaimer: this command is currently alpha.
+Alpha Disclaimer: this command is currently alpha.
 
 ### Options
 

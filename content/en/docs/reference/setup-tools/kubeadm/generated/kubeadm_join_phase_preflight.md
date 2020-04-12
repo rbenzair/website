@@ -1,6 +1,4 @@
 
-Run join pre-flight checks
-
 ### Synopsis
 
 
@@ -55,6 +53,13 @@ kubeadm join phase preflight [api-server-endpoint] [flags]
     </tr>
 
     <tr>
+      <td colspan="2">--control-plane</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Create a new control plane instance on this node</td>
+    </tr>
+
+    <tr>
       <td colspan="2">--cri-socket string</td>
     </tr>
     <tr>
@@ -87,13 +92,6 @@ kubeadm join phase preflight [api-server-endpoint] [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">For token-based discovery, allow joining without --discovery-token-ca-cert-hash pinning.</td>
-    </tr>
-
-    <tr>
-      <td colspan="2">--experimental-control-plane</td>
-    </tr>
-    <tr>
-      <td></td><td style="line-height: 130%; word-wrap: break-word;">Create a new control plane instance on this node</td>
     </tr>
 
     <tr>

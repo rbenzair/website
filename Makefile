@@ -1,11 +1,11 @@
 DOCKER       = docker
-HUGO_VERSION = 0.53
+HUGO_VERSION = $(shell grep ^HUGO_VERSION netlify.toml | tail -n 1 | cut -d '=' -f 2 | tr -d " \"\n")
 DOCKER_IMAGE = kubernetes-hugo
 DOCKER_RUN   = $(DOCKER) run --rm --interactive --tty --volume $(CURDIR):/src
 NODE_BIN     = node_modules/.bin
 NETLIFY_FUNC = $(NODE_BIN)/netlify-lambda
 
-.PHONY: all build sass build-preview help serve
+.PHONY: all build build-preview help serve
 
 help: ## Show this help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -18,22 +18,19 @@ build: ## Build site with production settings and put deliverables in ./public
 build-preview: ## Build site with drafts and future posts enabled
 	hugo --buildDrafts --buildFuture
 
+deploy-preview: ## Deploy preview site via netlify
+	hugo --enableGitInfo --buildFuture -b $(DEPLOY_PRIME_URL)
+
 functions-build:
 	$(NETLIFY_FUNC) build functions-src
 
 check-headers-file:
 	scripts/check-headers-file.sh
 
-production-build: test-examples check-hugo-versions build check-headers-file ## Build the production site and ensure that noindex headers aren't added
+production-build: build check-headers-file ## Build the production site and ensure that noindex headers aren't added
 
-non-production-build: test-examples check-hugo-versions ## Build the non-production site, which adds noindex headers to prevent indexing
+non-production-build: ## Build the non-production site, which adds noindex headers to prevent indexing
 	hugo --enableGitInfo
-
-sass-build:
-	scripts/sass.sh build
-
-sass-develop:
-	scripts/sass.sh develop
 
 serve: ## Boot the development server.
 	hugo server --buildFuture
@@ -50,6 +47,3 @@ docker-serve:
 test-examples:
 	scripts/test_examples.sh install
 	scripts/test_examples.sh run
-
-check-hugo-versions:
-	scripts/hugo-version-check.sh $(HUGO_VERSION)

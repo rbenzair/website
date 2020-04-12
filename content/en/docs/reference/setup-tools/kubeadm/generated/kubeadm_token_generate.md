@@ -1,6 +1,4 @@
 
-Generate and print a bootstrap token, but do not create it on the server.
-
 ### Synopsis
 
 

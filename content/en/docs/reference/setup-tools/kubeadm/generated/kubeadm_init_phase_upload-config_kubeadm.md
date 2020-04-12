@@ -1,10 +1,8 @@
 
-Uploads the kubeadm ClusterConfiguration to a ConfigMap
-
 ### Synopsis
 
 
-Uploads the kubeadm ClusterConfiguration to a ConfigMap called kubeadm-config in the kube-system namespace. This enables correct configuration of system components and a seamless user experience when upgrading. 
+Upload the kubeadm ClusterConfiguration to a ConfigMap called kubeadm-config in the kube-system namespace. This enables correct configuration of system components and a seamless user experience when upgrading.
 
 Alternatively, you can use kubeadm config.
 
@@ -15,7 +13,7 @@ kubeadm init phase upload-config kubeadm [flags]
 ### Examples
 
 ```
-  # uploads the configuration of your cluster
+  # upload the configuration of your cluster
   kubeadm init phase upload-config --config=myConfig.yaml
 ```
 

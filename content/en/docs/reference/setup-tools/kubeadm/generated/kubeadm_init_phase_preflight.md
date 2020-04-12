@@ -1,6 +1,4 @@
 
-Run pre-flight checks
-
 ### Synopsis
 
 

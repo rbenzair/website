@@ -1,6 +1,4 @@
 
-Utilities for kubelet configuration
-
 ### Synopsis
 
 

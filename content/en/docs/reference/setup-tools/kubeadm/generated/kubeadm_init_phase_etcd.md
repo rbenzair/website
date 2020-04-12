@@ -1,6 +1,4 @@
 
-Generates static Pod manifest file for local etcd.
-
 ### Synopsis
 
 

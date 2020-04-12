@@ -1,28 +1,22 @@
 ---
 title: Workload
-id: workload
-date: 2019-02-12
+id: workloads
+date: 2019-02-13
 full_link: /docs/concepts/workloads/
 short_description: >
-  A set of applications for processing information to serve a purpose that is valuable to a single user or group of users.
+   A workload is an application running on Kubernetes.
 
-aka:
+aka: 
 tags:
-- workload
+- fundamental
 ---
-A workload consists of a system of services or applications that can run to fulfill a
-task or carry out a business process.
+   A workload is an application running on Kubernetes.
 
-<!--more-->
+<!--more--> 
 
-Alongside the computer code that runs to carry out the task, a workload also entails
-the infrastructure resources that actually run that code.
+Various core objects that represent different types or parts of a workload
+include the DaemonSet, Deployment, Job, ReplicaSet, and StatefulSet objects.
 
-For example, a workload that has a web element and a database element might run the
-database in one {{< glossary_tooltip term_id="StatefulSet" >}} of
-{{< glossary_tooltip text="pods" term_id="pod" >}} and the webserver via
-a {{< glossary_tooltip term_id="Deployment" >}} that consists of many web app
-{{< glossary_tooltip text="pods" term_id="pod" >}}, all alike.
-
-The organisation running this workload may well have other workloads that together
-provide a valuable outcome to its users.
+For example, a workload that has a web server and a database might run the
+database in one {{< glossary_tooltip term_id="StatefulSet" >}} and the web server
+in a {{< glossary_tooltip term_id="Deployment" >}}.

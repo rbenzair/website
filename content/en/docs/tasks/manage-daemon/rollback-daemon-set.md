@@ -3,6 +3,7 @@ reviewers:
 - janetkuo
 title: Perform a Rollback on a DaemonSet
 content_template: templates/task
+weight: 20
 ---
 
 {{% capture overview %}}
@@ -131,7 +132,8 @@ NAME                               CONTROLLER                     REVISION   AGE
 ```
 
 Each `ControllerRevision` stores the annotations and template of a DaemonSet
-revision.
+revision. The name of a ControllerRevision object must be a valid
+[DNS subdomain name](/docs/concepts/overview/working-with-objects/names#dns-subdomain-names).
 
 `kubectl rollout undo` takes a specific `ControllerRevision` and replaces
 DaemonSet template with the template stored in the `ControllerRevision`.

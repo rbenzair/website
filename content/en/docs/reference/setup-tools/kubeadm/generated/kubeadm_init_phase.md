@@ -1,10 +1,8 @@
 
-use this command to invoke single phase of the init workflow
-
 ### Synopsis
 
 
-use this command to invoke single phase of the init workflow
+Use this command to invoke single phase of the init workflow
 
 ### Options
 

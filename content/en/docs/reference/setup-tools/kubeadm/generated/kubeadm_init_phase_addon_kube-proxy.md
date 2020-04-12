@@ -1,10 +1,8 @@
 
-Installs the kube-proxy addon to a Kubernetes cluster
-
 ### Synopsis
 
 
-Installs the kube-proxy addon components via the API server.
+Install the kube-proxy addon components via the API server.
 
 ```
 kubeadm init phase addon kube-proxy [flags]
@@ -38,6 +36,13 @@ kubeadm init phase addon kube-proxy [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">Path to a kubeadm configuration file.</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">--control-plane-endpoint string</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Specify a stable IP address or DNS name for the control plane.</td>
     </tr>
 
     <tr>

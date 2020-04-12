@@ -56,7 +56,7 @@ get terminated and replaced by new ones.
 At this point, each Pod has one Container that runs the nginx image. Now suppose
 you want each Pod to have two containers: one that runs nginx and one that runs redis.
 
-Create a file named `patch-file-containers.yaml` that has this content:
+Create a file named `patch-file.yaml` that has this content:
 
 ```yaml
 spec:
@@ -69,9 +69,14 @@ spec:
 
 Patch your Deployment:
 
-```shell
-kubectl patch deployment patch-demo --patch "$(cat patch-file-containers.yaml)"
-```
+{{< tabs name="kubectl_patch_example" >}}
+{{{< tab name="Bash" codelang="bash" >}}
+kubectl patch deployment patch-demo --patch "$(cat patch-file.yaml)"
+{{< /tab >}}
+{{< tab name="PowerShell" codelang="posh" >}}
+kubectl patch deployment patch-demo --patch $(Get-Content patch-file.yaml -Raw)
+{{< /tab >}}}
+{{< /tabs >}}
 
 View the patched Deployment:
 
@@ -330,11 +335,9 @@ and
 
 {{% capture whatsnext %}}
 
-* [Kubernetes Object Management](/docs/concepts/overview/object-management-kubectl/overview/)
-* [Managing Kubernetes Objects Using Imperative Commands](/docs/concepts/overview/object-management-kubectl/imperative-command/)
-* [Imperative Management of Kubernetes Objects Using Configuration Files](/docs/concepts/overview/object-management-kubectl/imperative-config/)
-* [Declarative Management of Kubernetes Objects Using Configuration Files](/docs/concepts/overview/object-management-kubectl/declarative-config/)
+* [Kubernetes Object Management](/docs/concepts/overview/working-with-objects/object-management/)
+* [Managing Kubernetes Objects Using Imperative Commands](/docs/tasks/manage-kubernetes-objects/imperative-command/)
+* [Imperative Management of Kubernetes Objects Using Configuration Files](/docs/tasks/manage-kubernetes-objects/imperative-config/)
+* [Declarative Management of Kubernetes Objects Using Configuration Files](/docs/tasks/manage-kubernetes-objects/declarative-config/)
 
 {{% /capture %}}
-
-

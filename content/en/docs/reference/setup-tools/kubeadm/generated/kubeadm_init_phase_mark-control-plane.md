@@ -1,6 +1,4 @@
 
-Mark a node as a control-plane
-
 ### Synopsis
 
 

@@ -28,8 +28,8 @@ cards:
   button: "Lihat tutorial"
   button_path: "/docs/tutorials"
 - name: setup
-  title: "Menyiapkan sebuah kluster"
-  description: "Dapatkan kluster Kubernetes sesuai dengan kapasitas dan kebutuhanmu."
+  title: "Menyiapkan sebuah klaster"
+  description: "Dapatkan klaster Kubernetes sesuai dengan kapasitas dan kebutuhanmu."
   button: "Menyiapkan Kubernetes"
   button_path: "/docs/setup"
 - name: tasks
@@ -39,17 +39,17 @@ cards:
   button_path: "/docs/tasks"
 - name: reference
   title: Lihat referensi
-  description: Lihat-lihat istilah, sintaks command line, ragam API, dan dokumentasi tool.
+  description: Lihat-lihat istilah, sintaks command line, ragam API, dan perkakas dokumentasi.
   button: Lihat referensi
   button_path: /docs/reference
 - name: contribute
-  title: Kontribusi ke dokumentasi
-  description: Siapapun bisa kontribusi, buat kamu yang baru di proyek ini maupun sudah lama.
-  button: Kontribusi ke dokumentasi
+  title: Berkontribusi ke dokumentasi
+  description: Siapapun bisa berkontribusi, buat kamu yang baru atau sudah lama di proyek ini.
+  button: Berkontribusi ke dokumentasi
   button_path: /docs/contribute
 - name: download
   title: Unduh Kubernetes
-  description: Untuk instalasi atau pembaharuan Kubernetes ke versi paling baru, lihat catatan rilis saat ini.
+  description: Untuk instalasi atau pembaharuan Kubernetes ke versi terbaru, lihat catatan rilis saat ini.
 - name: about
   title: Tentang dokumentasi
   description: Situs ini merupakan dokumentasi dari Kubernetes versi saat ini dan 4 versi sebelumnya.

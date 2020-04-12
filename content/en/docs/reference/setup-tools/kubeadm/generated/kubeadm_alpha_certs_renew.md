@@ -1,6 +1,4 @@
 
-Renews certificates for a Kubernetes cluster
-
 ### Synopsis
 
 

@@ -1,12 +1,10 @@
 
-Generates the self-signed CA to provision identities for front proxy
-
 ### Synopsis
 
 
-Generates the self-signed CA to provision identities for front proxy, and saves them into front-proxy-ca.cert and front-proxy-ca.key files. 
+Generate the self-signed CA to provision identities for front proxy, and save them into front-proxy-ca.cert and front-proxy-ca.key files.
 
-If both files already exist, kubeadm skips the generation step and existing files will be used. 
+If both files already exist, kubeadm skips the generation step and existing files will be used.
 
 Alpha Disclaimer: this command is currently alpha.
 
@@ -42,6 +40,13 @@ kubeadm init phase certs front-proxy-ca [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">help for front-proxy-ca</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">--kubernetes-version string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: "stable-1"</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Choose a specific Kubernetes version for the control plane.</td>
     </tr>
 
   </tbody>

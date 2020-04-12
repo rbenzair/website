@@ -1,6 +1,4 @@
 
-Generates all kubeconfig files necessary to establish the control plane and the admin kubeconfig file
-
 ### Synopsis
 
 

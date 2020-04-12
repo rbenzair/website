@@ -1,6 +1,4 @@
 
-kubeadm: easily bootstrap a secure Kubernetes cluster
-
 ### Synopsis
 
 
@@ -29,7 +27,7 @@ Example usage:
     ┌──────────────────────────────────────────────────────────┐
     │ On the second machine:                                   │
     ├──────────────────────────────────────────────────────────┤
-    │ worker# kubeadm join <arguments-returned-from-init>      │
+    │ worker# kubeadm join &lt;arguments-returned-from-init&gt;      │
     └──────────────────────────────────────────────────────────┘
 
     You can then repeat the second step on as many other machines as you like.

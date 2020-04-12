@@ -1,6 +1,4 @@
 
-Print the version of kubeadm
-
 ### Synopsis
 
 

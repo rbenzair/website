@@ -1,6 +1,4 @@
 
-Installs required addons for passing Conformance tests
-
 ### Synopsis
 
 

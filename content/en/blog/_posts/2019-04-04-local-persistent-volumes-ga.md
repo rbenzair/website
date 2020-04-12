@@ -253,10 +253,9 @@ For one, we had to take into account the hardware profiles of the nodes in our
 Kubernetes cluster. For example, how many local disks would each node cluster
 have? How would they be partitioned?
 
-The local static provisioner
-[README](https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner/#best-practices)
-provides guidance to help answer these
-questions. It’s best to be able to dedicate a full disk to each local volume
+The local static provisioner provides 
+[guidance](https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner/blob/master/docs/best-practices.md)
+to help answer these questions. It’s best to be able to dedicate a full disk to each local volume
 (for IO isolation) and a full partition per-volume (for capacity isolation).
 This was easier in our cloud environments where we could mix and match local
 disks. However, if using local volumes on-prem, hardware constraints may be a
@@ -324,7 +323,7 @@ Another popular ask has been to support dynamic provisioning using lvm. This can
 simplify disk management, and improve disk utilization. SIG Storage is
 evaluating the performance tradeoffs for the viability of this feature.
 
-## Getting Invovled
+## Getting Involved
 
 If you have feedback for this feature or are interested in getting involved with
 the design and development, join the [Kubernetes Storage

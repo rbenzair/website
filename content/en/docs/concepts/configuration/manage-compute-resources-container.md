@@ -27,6 +27,18 @@ the difference between requests and limits, see
 
 *CPU* and *memory* are each a *resource type*. A resource type has a base unit.
 CPU is specified in units of cores, and memory is specified in units of bytes.
+If you're using Kubernetes v1.14 or newer, you can specify _huge page_ resources.
+Huge pages are a Linux-specific feature where the node kernel allocates blocks of memory
+that are much larger than the default page size.
+
+For example, on a system where the default page size is 4KiB, you could specify a limit,
+`hugepages-2Mi: 80Mi`. If the container tries allocating over 40 2MiB huge pages (a
+total of 80 MiB), that allocation fails.
+
+{{< note >}}
+You cannot overcommit `hugepages-*` resources.
+This is different from the `memory` and `cpu` resources.
+{{< /note >}}
 
 CPU and memory are collectively referred to as *compute resources*, or just
 *resources*. Compute
@@ -42,24 +54,21 @@ Each Container of a Pod can specify one or more of the following:
 
 * `spec.containers[].resources.limits.cpu`
 * `spec.containers[].resources.limits.memory`
+* `spec.containers[].resources.limits.hugepages-<size>`
 * `spec.containers[].resources.requests.cpu`
 * `spec.containers[].resources.requests.memory`
+* `spec.containers[].resources.requests.hugepages-<size>`
 
 Although requests and limits can only be specified on individual Containers, it
 is convenient to talk about Pod resource requests and limits. A
 *Pod resource request/limit* for a particular resource type is the sum of the
 resource requests/limits of that type for each Container in the Pod.
 
+
 ## Meaning of CPU
 
 Limits and requests for CPU resources are measured in *cpu* units.
-One cpu, in Kubernetes, is equivalent to:
-
-- 1 AWS vCPU
-- 1 GCP Core
-- 1 Azure vCore
-- 1 IBM vCPU
-- 1 *Hyperthread* on a bare-metal Intel processor with Hyperthreading
+One cpu, in Kubernetes, is equivalent to **1 vCPU/Core** for cloud providers and **1 hyperthread** on bare-metal Intel processors.
 
 Fractional requests are allowed. A Container with
 `spec.containers[].resources.requests.cpu` of `0.5` is guaranteed half as much
@@ -142,7 +151,7 @@ When using Docker:
 - The `spec.containers[].resources.requests.cpu` is converted to its core value,
   which is potentially fractional, and multiplied by 1024. The greater of this number
   or 2 is used as the value of the
-  [`--cpu-shares`](https://docs.docker.com/engine/reference/run/#/cpu-share-constraint)
+  [`--cpu-shares`](https://docs.docker.com/engine/reference/run/#cpu-share-constraint)
   flag in the `docker run` command.
 
 - The `spec.containers[].resources.limits.cpu` is converted to its millicore value and
@@ -176,9 +185,10 @@ resource limits, see the
 
 The resource usage of a Pod is reported as part of the Pod status.
 
-If [optional monitoring](http://releases.k8s.io/{{< param "githubbranch" >}}/cluster/addons/cluster-monitoring/README.md)
-is configured for your cluster, then Pod resource usage can be retrieved from
-the monitoring system.
+If optional [tools for monitoring](/docs/tasks/debug-application-cluster/resource-usage-monitoring/)
+are available in your cluster, then Pod resource usage can be retrieved either
+from the [Metrics API](/docs/tasks/debug-application-cluster/resource-metrics-pipeline/#the-metrics-api)
+directly or from your monitoring tools.
 
 ## Troubleshooting
 
@@ -212,10 +222,10 @@ You can check node capacities and amounts allocated with the
 `kubectl describe nodes` command. For example:
 
 ```shell
-kubectl describe nodes e2e-test-minion-group-4lw4
+kubectl describe nodes e2e-test-node-pool-4lw4
 ```
 ```
-Name:            e2e-test-minion-group-4lw4
+Name:            e2e-test-node-pool-4lw4
 [ ... lines removed for clarity ...]
 Capacity:
  cpu:                               2
@@ -376,13 +386,77 @@ spec:
 ### How Pods with ephemeral-storage requests are scheduled
 
 When you create a Pod, the Kubernetes scheduler selects a node for the Pod to
-run on. Each node has a maximum amount of local ephemeral storage it can provide for Pods. For more information, see ["Node Allocatable"](/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable). 
+run on. Each node has a maximum amount of local ephemeral storage it can provide for Pods. For more information, see ["Node Allocatable"](/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable).
 
 The scheduler ensures that the sum of the resource requests of the scheduled Containers is less than the capacity of the node.
 
 ### How Pods with ephemeral-storage limits run
 
 For container-level isolation, if a Container's writable layer and logs usage exceeds its storage limit, the Pod will be evicted. For pod-level isolation, if the sum of the local ephemeral storage usage from all containers and also the Pod's emptyDir volumes exceeds the limit, the Pod will be evicted.
+
+### Monitoring ephemeral-storage consumption
+
+When local ephemeral storage is used, it is monitored on an ongoing
+basis by the kubelet.  The monitoring is performed by scanning each
+emptyDir volume, log directories, and writable layers on a periodic
+basis.  Starting with Kubernetes 1.15, emptyDir volumes (but not log
+directories or writable layers) may, at the cluster operator's option,
+be managed by use of [project
+quotas](http://xfs.org/docs/xfsdocs-xml-dev/XFS_User_Guide/tmp/en-US/html/xfs-quotas.html).
+Project quotas were originally implemented in XFS, and have more
+recently been ported to ext4fs.  Project quotas can be used for both
+monitoring and enforcement; as of Kubernetes 1.16, they are available
+as alpha functionality for monitoring only.
+
+Quotas are faster and more accurate than directory scanning.  When a
+directory is assigned to a project, all files created under a
+directory are created in that project, and the kernel merely has to
+keep track of how many blocks are in use by files in that project.  If
+a file is created and deleted, but with an open file descriptor, it
+continues to consume space.  This space will be tracked by the quota,
+but will not be seen by a directory scan.
+
+Kubernetes uses project IDs starting from 1048576.  The IDs in use are
+registered in `/etc/projects` and `/etc/projid`.  If project IDs in
+this range are used for other purposes on the system, those project
+IDs must be registered in `/etc/projects` and `/etc/projid` to prevent
+Kubernetes from using them.
+
+To enable use of project quotas, the cluster operator must do the
+following:
+
+* Enable the `LocalStorageCapacityIsolationFSQuotaMonitoring=true`
+  feature gate in the kubelet configuration.  This defaults to `false`
+  in Kubernetes 1.16, so must be explicitly set to `true`.
+
+* Ensure that the root partition (or optional runtime partition) is
+  built with project quotas enabled.  All XFS filesystems support
+  project quotas, but ext4 filesystems must be built specially.
+
+* Ensure that the root partition (or optional runtime partition) is
+  mounted with project quotas enabled.
+
+#### Building and mounting filesystems with project quotas enabled
+
+XFS filesystems require no special action when building; they are
+automatically built with project quotas enabled.
+
+Ext4fs filesystems must be built with quotas enabled, then they must
+be enabled in the filesystem:
+
+```
+% sudo mkfs.ext4 other_ext4fs_args... -E quotatype=prjquota /dev/block_device
+% sudo tune2fs -O project -Q prjquota /dev/block_device
+
+```
+
+To mount the filesystem, both ext4fs and XFS require the `prjquota`
+option set in `/etc/fstab`:
+
+```
+/dev/block_device	/var/kubernetes_data	defaults,prjquota	0	0
+```
+
 
 ## Extended resources
 
@@ -523,27 +597,7 @@ spec:
         example.com/foo: 1
 ```
 
-## Planned Improvements
 
-Kubernetes version 1.5 only allows resource quantities to be specified on a
-Container. It is planned to improve accounting for resources that are shared by
-all Containers in a Pod, such as
-[emptyDir volumes](/docs/concepts/storage/volumes/#emptydir).
-
-Kubernetes version 1.5 only supports Container requests and limits for CPU and
-memory. It is planned to add new resource types, including a node disk space
-resource, and a framework for adding custom
-[resource types](https://github.com/kubernetes/community/blob/{{< param "githubbranch" >}}/contributors/design-proposals/scheduling/resources.md).
-
-Kubernetes supports overcommitment of resources by supporting multiple levels of
-[Quality of Service](http://issue.k8s.io/168).
-
-In Kubernetes version 1.5, one unit of CPU means different things on different
-cloud providers, and on different machine types within the same cloud providers.
-For example, on AWS, the capacity of a node is reported in
-[ECUs](http://aws.amazon.com/ec2/faqs/), while in GCE it is reported in logical
-cores. We plan to revise the definition of the cpu resource to allow for more
-consistency across providers and platforms.
 
 {{% /capture %}}
 

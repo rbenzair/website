@@ -1,6 +1,4 @@
 
-Mark a node as a control-plane
-
 ### Synopsis
 
 
@@ -27,7 +25,7 @@ kubeadm join phase control-plane-join mark-control-plane [flags]
     </tr>
 
     <tr>
-      <td colspan="2">--experimental-control-plane</td>
+      <td colspan="2">--control-plane</td>
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">Create a new control plane instance on this node</td>

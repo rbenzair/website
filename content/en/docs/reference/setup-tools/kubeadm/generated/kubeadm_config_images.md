@@ -1,10 +1,8 @@
 
-Interact with container images used by kubeadm.
-
 ### Synopsis
 
 
-Interact with container images used by kubeadm.
+Interact with container images used by kubeadm
 
 ```
 kubeadm config images [flags]

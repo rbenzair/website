@@ -1,12 +1,10 @@
 
-Generates the client for the front proxy
-
 ### Synopsis
 
 
-Generates the client for the front proxy, and saves them into front-proxy-client.cert and front-proxy-client.key files. 
+Generate the certificate for the front proxy client, and save them into front-proxy-client.cert and front-proxy-client.key files.
 
-If both files already exist, kubeadm skips the generation step and existing files will be used. 
+If both files already exist, kubeadm skips the generation step and existing files will be used.
 
 Alpha Disclaimer: this command is currently alpha.
 
@@ -56,6 +54,13 @@ kubeadm init phase certs front-proxy-client [flags]
     </tr>
     <tr>
       <td></td><td style="line-height: 130%; word-wrap: break-word;">help for front-proxy-client</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">--kubernetes-version string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: "stable-1"</td>
+    </tr>
+    <tr>
+      <td></td><td style="line-height: 130%; word-wrap: break-word;">Choose a specific Kubernetes version for the control plane.</td>
     </tr>
 
   </tbody>

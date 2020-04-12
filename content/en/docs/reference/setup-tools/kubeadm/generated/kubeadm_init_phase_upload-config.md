@@ -1,6 +1,4 @@
 
-Uploads the kubeadm and kubelet configuration to a ConfigMap
-
 ### Synopsis
 
 

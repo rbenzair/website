@@ -1,6 +1,4 @@
 
-Manage bootstrap tokens.
-
 ### Synopsis
 
 
